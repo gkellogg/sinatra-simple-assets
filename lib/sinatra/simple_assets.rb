@@ -31,6 +31,32 @@ module Sinatra
       def name
         "#{@name}.#{@type}"
       end
+
+      def hash_name
+        "#{@name}-#{hash}.#{@type}"
+      end
+
+      def hashed_path
+        "#{path}/#{hash_name}"
+      end
+
+      def hash
+        @hash ||= Digest::SHA1.hexdigest combined
+      end
+
+      def content
+        combined
+      end
+
+      def combined
+        @combined ||= @files.map do |file|
+          File.open(@root + file) { |f| f.read }
+        end.join("\n")
+      end
+
+      def path
+        @type == :js ? 'javascripts' : 'stylesheets'
+      end
     end
 
     class Assets
@@ -57,7 +83,13 @@ module Sinatra
       def paths_for(bundle)
         bundle = @bundles[bundle]
         return [] unless bundle
-        bundle.files
+
+        if @app.environment == :production
+          @hashes[bundle.hash_name] = bundle.name
+          [bundle.hashed_path]
+        else
+          bundle.files
+        end
       end
 
       def content_for(bundle)
