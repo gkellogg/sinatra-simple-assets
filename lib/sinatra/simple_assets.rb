@@ -5,20 +5,22 @@ module Sinatra
     VERSION = '0.0.1'
 
     module Helpers
-      def stylesheet(name)
-        settings.assets.paths_for("#{name}.css").map do |file|
+      def stylesheet(bundle)
+        settings.assets.paths_for("#{bundle}.css").map do |file|
           "<link rel=\"stylesheet\" href=\"#{url(file)}\">"
         end.join("\n")
       end
 
-      def javascript(name)
-        settings.assets.paths_for("#{name}.js").map do |file|
+      def javascript(bundle)
+        settings.assets.paths_for("#{bundle}.js").map do |file|
           "<script src=\"#{url(file)}\"></script>"
         end.join("\n")
       end
     end
 
     class Bundle
+      attr_accessor :files
+
       def initialize(name, type, root, files)
         @name = name
         @type = type
@@ -47,13 +49,15 @@ module Sinatra
         create_bundle(bundle, :js, files)
       end
 
-      def create_bundle(name, type, name, files)
+      def create_bundle(name, type, files)
         bundle = Bundle.new(name, type, @app.public_folder, files)
         @bundles[bundle.name] = bundle
       end
 
       def paths_for(bundle)
-        []
+        bundle = @bundles[bundle]
+        return [] unless bundle
+        bundle.files
       end
 
       def content_for(bundle)
