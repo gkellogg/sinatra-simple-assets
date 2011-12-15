@@ -64,6 +64,12 @@ module Sinatra
       def path
         @type == :js ? 'javascripts' : 'stylesheets'
       end
+
+      def compile
+        File.open("#{@root}/#{hashed_path}", 'w') do |f|
+          f << content
+        end
+      end
     end
 
     class Assets
@@ -102,6 +108,12 @@ module Sinatra
       def content_for(bundle)
         bundle = @bundles[@hashes[bundle]]
         bundle.content if bundle
+      end
+
+      def precompile
+        @bundles.values.each do |bundle|
+          bundle.compile
+        end
       end
     end
 
