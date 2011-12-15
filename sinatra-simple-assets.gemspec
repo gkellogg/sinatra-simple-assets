@@ -1,7 +1,7 @@
 # -*- encoding: utf-8 -*-
 Gem::Specification.new do |s|
   s.name        = 'sinatra-simple-assets'
-  s.version     = '0.0.1'
+  s.version     = '0.0.2'
   s.authors     = ["Pete O'Grady"]
   s.email       = ['pete@peteogrady.com']
   s.homepage    = 'https://github.com/peteog/sinatra-simple-assets'
