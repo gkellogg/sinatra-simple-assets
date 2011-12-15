@@ -115,6 +115,10 @@ module Sinatra
           bundle.compile
         end
       end
+
+      def bundle_exists?(bundle)
+        @hashes[bundle]
+      end
     end
 
     def assets(&block)
@@ -133,13 +137,16 @@ module Sinatra
       end
 
       def serve_content(bundle, type)
-        content = settings.assets.content_for(bundle)
-        not_found unless content
+        assets = settings.assets
+        exists = assets.bundle_exists?(bundle)
+
+        etag bundle if exists
+        not_found unless exists
+
+        cache_control :public, :must_revalidate, :max_age => 86400
 
         content_type type
-        content
-
-        #TODO set cache headers
+        assets.content_for(bundle)
       end
     end
   end
