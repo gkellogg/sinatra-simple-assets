@@ -18,16 +18,38 @@ module Sinatra
       end
     end
 
+    class Bundle
+      def initialize(name, type, root, files)
+        @name = name
+        @type = type
+        @root = root
+        @files = files
+      end
+
+      def name
+        "#{@name}.#{@type}"
+      end
+    end
+
     class Assets
       def initialize(app, &block)
         @app = app
+        @bundles = {}
+        @hashes = {}
         instance_eval(&block)
       end
 
       def css(bundle, files)
+        create_bundle(bundle, :css, files)
       end
 
       def js(bundle, files)
+        create_bundle(bundle, :js, files)
+      end
+
+      def create_bundle(name, type, name, files)
+        bundle = Bundle.new(name, type, @app.public_folder, files)
+        @bundles[bundle.name] = bundle
       end
 
       def paths_for(bundle)
@@ -35,6 +57,8 @@ module Sinatra
       end
 
       def content_for(bundle)
+        bundle = @bundles[@hashes[bundle]]
+        bundle.content if bundle
       end
     end
 
