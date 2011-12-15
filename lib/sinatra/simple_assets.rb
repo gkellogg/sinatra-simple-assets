@@ -41,11 +41,16 @@ module Sinatra
       end
 
       def hash
-        @hash ||= Digest::SHA1.hexdigest combined
+        @hash ||= Digest::SHA1.hexdigest content
       end
 
       def content
-        combined
+        case @type
+        when :js
+          @content ||= Uglifier.new.compress combined
+        when :css
+          @content ||= CSSMin.minify combined
+        end
       end
 
       def combined
@@ -119,6 +124,8 @@ module Sinatra
 
         content_type type
         content
+
+        #TODO set cache headers
       end
     end
   end
