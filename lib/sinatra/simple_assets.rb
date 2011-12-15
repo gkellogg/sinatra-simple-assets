@@ -24,14 +24,17 @@ module Sinatra
         instance_eval(&block)
       end
 
-      def css(name, files)
+      def css(bundle, files)
       end
 
-      def js(name, files)
+      def js(bundle, files)
       end
 
-      def paths_for(name)
+      def paths_for(bundle)
         []
+      end
+
+      def content_for(bundle)
       end
     end
 
@@ -41,6 +44,22 @@ module Sinatra
 
     def self.registered(app)
       app.helpers SimpleAssets::Helpers
+
+      app.get '/stylesheets/:bundle' do
+        serve_content(params[:bundle], :css)
+      end
+
+      app.get '/javascripts/:bundle' do
+        serve_content(params[:bundle], :js)
+      end
+
+      def serve_content(bundle, type)
+        content = settings.assets.content_for(bundle)
+        not_found unless content
+
+        content_type type
+        content
+      end
     end
   end
 end
