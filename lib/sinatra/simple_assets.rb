@@ -1,4 +1,6 @@
 require 'sinatra/base'
+require 'cssmin'
+require 'uglifier'
 
 module Sinatra
   module SimpleAssets
