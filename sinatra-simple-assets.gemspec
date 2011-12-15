@@ -1,10 +1,7 @@
 # -*- encoding: utf-8 -*-
-$:.push File.expand_path('../lib', __FILE__)
-require 'sinatra/simple_assets'
-
 Gem::Specification.new do |s|
   s.name        = 'sinatra-simple-assets'
-  s.version     = Sinatra::SimpleAssets::VERSION
+  s.version     = '0.0.1'
   s.authors     = ["Pete O'Grady"]
   s.email       = ['pete@peteogrady.com']
   s.homepage    = ""

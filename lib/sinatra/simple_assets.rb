@@ -4,8 +4,6 @@ require 'uglifier'
 
 module Sinatra
   module SimpleAssets
-    VERSION = '0.0.1'
-
     module Helpers
       def stylesheet(bundle)
         settings.assets.paths_for("#{bundle}.css").map do |file|
