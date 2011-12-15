@@ -126,26 +126,26 @@ module Sinatra
     def self.registered(app)
       app.helpers SimpleAssets::Helpers
 
-      app.get '/stylesheets/:bundle' do
-        serve_content(params[:bundle], :css)
-      end
+      [
+        { :route => '/stylesheets', :type => :css },
+        { :route => '/javascripts', :type => :js }
+      ].each do |r|
+        app.get "#{r[:route]}/:bundle" do
+          bundle = params[:bundle]
+          assets = settings.assets
+          exists = assets.bundle_exists?(bundle)
 
-      app.get '/javascripts/:bundle' do
-        serve_content(params[:bundle], :js)
-      end
+          etag bundle if exists
+          not_found unless exists
 
-      def serve_content(bundle, type)
-        assets = settings.assets
-        exists = assets.bundle_exists?(bundle)
+          cache_control :public, :must_revalidate, :max_age => 86400
 
-        etag bundle if exists
-        not_found unless exists
-
-        cache_control :public, :must_revalidate, :max_age => 86400
-
-        content_type type
-        assets.content_for(bundle)
+          content_type r[:type]
+          assets.content_for(bundle)
+        end
       end
     end
   end
+
+  register SimpleAssets
 end
