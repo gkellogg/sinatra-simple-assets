@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title><%= settings.app_name %></title>
+    <%= stylesheet :application %>
+  </head>
+  <body>
+  <div class="topbar">
+      <div class="fill">
+        <div class="container">
+          <a class="brand" href="<%= url('/') %>"><%= settings.app_name %></a>
+        </div>
+      </div>
+    </div>
+    <div class="container">
+      <%= yield %>
+      <footer>
+      </footer>
+    </div>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="<%= url('/javascripts/jquery.js') %>"><\/script>')</script>
+    <%= javascript :application %>
+  </body>
+</html>
