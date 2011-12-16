@@ -1,7 +1,7 @@
 # -*- encoding: utf-8 -*-
 Gem::Specification.new do |s|
   s.name        = 'sinatra-simple-assets'
-  s.version     = '0.0.2'
+  s.version     = '0.0.3'
   s.authors     = ["Pete O'Grady"]
   s.email       = ['pete@peteogrady.com']
   s.homepage    = 'https://github.com/peteog/sinatra-simple-assets'
@@ -13,8 +13,8 @@ Gem::Specification.new do |s|
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   s.require_paths = ['lib']
 
-  s.add_dependency 'cssmin', '1.0.2'
+  s.add_dependency 'cssmin', '~> 1.0.2'
   s.add_dependency 'sinatra', '~> 1.3.0'
-  s.add_dependency 'therubyracer-heroku', '0.8.1.pre3'
-  s.add_dependency 'uglifier', '1.1.0'
+  s.add_dependency 'therubyracer-heroku', '~> 0.8.1.pre3'
+  s.add_dependency 'uglifier', '~> 1.1.0'
 end
