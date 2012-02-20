@@ -1,6 +1,4 @@
 require 'sinatra/base'
-require 'uglifier'
-require 'cssmin'
 
 module Sinatra
   module SimpleAssets
@@ -41,18 +39,22 @@ module Sinatra
       end
 
       def hash
-        @hash ||= Digest::SHA1.hexdigest content
-      rescue ExecJS::RuntimeUnavailable
-        # Find the most recent compressed version if the JS runtime is unavailable
-        fname = Dir.glob("#{@root}/#{@path}/#{@name}-*.#{@type}").sort_by {|f| File.mtime(f)}.last
-        fname.match(/-(.*)\.#{@type}/) && $1
+        @hash ||= begin
+          Digest::SHA1.hexdigest content
+        rescue
+          # Find the most recent compressed version if the JS runtime is unavailable
+          fname = Dir.glob("#{@root}/#{@path}/#{@name}-*.#{@type}").sort_by {|f| File.mtime(f)}.last
+          fname.match(/-(.*)\.#{@type}/) && $1
+        end
       end
 
       def content
         case @type
         when :js
+          require 'uglifier'
           @content ||= Uglifier.new.compress combined
         when :css
+          require 'cssmin'
           @content ||= CSSMin.minify combined
         end
       end
