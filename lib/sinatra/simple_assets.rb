@@ -1,6 +1,4 @@
 require 'sinatra/base'
-require 'cssmin'
-require 'uglifier'
 
 module Sinatra
   module SimpleAssets
@@ -47,8 +45,10 @@ module Sinatra
       def content
         case @type
         when :js
+          require 'uglifier'
           @content ||= Uglifier.new.compress combined
         when :css
+          require 'cssmin'
           @content ||= CSSMin.minify combined
         end
       end
