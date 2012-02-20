@@ -44,7 +44,7 @@ module Sinatra
         rescue
           # Find the most recent compressed version if the JS runtime is unavailable
           fname = Dir.glob("#{@root}/#{@path}/#{@name}-*.#{@type}").sort_by {|f| File.mtime(f)}.last
-          fname.match(/-(.*)\.#{@type}/) && $1
+          fname.split('-').last.sub(".#{@type}", "")
         end
       end
 
