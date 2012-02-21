@@ -43,8 +43,8 @@ module Sinatra
           Digest::SHA1.hexdigest content
         rescue
           # Find the most recent compressed version if the JS runtime is unavailable
-          fname = Dir.glob("#{@root}/#{@path}/#{@name}-*.#{@type}").sort_by {|f| File.mtime(f)}.last
-          fname.match(/-(.*)\.#{@type}/) && $1
+          fname = Dir.glob("#{@root}/#{path}/#{@name}-*.#{@type}").sort_by {|f| File.mtime(f)}.last
+          fname.split('-').last.sub(".#{@type}", "")
         end
       end
 
